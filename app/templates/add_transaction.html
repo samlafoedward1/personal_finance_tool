@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Add Transaction{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Add Transaction</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Add Income</h3>
+            <form method="POST" action="{{ url_for('main.add_transaction') }}">
+                {{ income_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ income_form.amount.label(class="form-control-label") }}
+                    {{ income_form.amount(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ income_form.category.label(class="form-control-label") }}
+                    {{ income_form.category(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ income_form.description.label(class="form-control-label") }}
+                    {{ income_form.description(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ income_form.submit(class="btn btn-primary btn-lg", id="income_submit") }}
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h3>Add Expense</h3>
+            <form method="POST" action="{{ url_for('main.add_transaction') }}">
+                {{ expense_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ expense_form.amount.label(class="form-control-label") }}
+                    {{ expense_form.amount(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ expense_form.category.label(class="form-control-label") }}
+                    {{ expense_form.category(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ expense_form.description.label(class="form-control-label") }}
+                    {{ expense_form.description(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ expense_form.submit(class="btn btn-primary btn-lg", id="expense_submit") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
