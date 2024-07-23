@@ -1,8 +1,9 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, Response, current_app, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from app import db, bcrypt
 from app.forms import RegistrationForm, LoginForm, IncomeForm, ExpenseForm
 from app.models import User, Income, Expense
+from collections import defaultdict
 
 main_bp = Blueprint('main', __name__)
 
@@ -46,7 +47,6 @@ def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-
 @main_bp.route("/dashboard")
 @login_required
 def dashboard():
@@ -70,16 +70,13 @@ def dashboard():
             'category': expense.category
         })
 
-    # Check if all transactions have the 'date' attribute
     for transaction in transactions:
         if 'date' not in transaction:
-            app.logger.error(f"Missing 'date' in transaction: {transaction}")
+            current_app.logger.error(f"Missing 'date' in transaction: {transaction}")
 
-    # Sort by date
     transactions.sort(key=lambda x: x['date'], reverse=True)
 
     return render_template('dashboard.html', title='Dashboard', transactions=transactions)
-
 
 @main_bp.route("/add_transaction", methods=['GET', 'POST'])
 @login_required
@@ -99,3 +96,35 @@ def add_transaction():
         flash('Your expense has been recorded!', 'success')
         return redirect(url_for('main.dashboard'))
     return render_template('add_transaction.html', title='Add Transaction', income_form=income_form, expense_form=expense_form)
+
+
+
+@main_bp.route("/transaction_data")
+@login_required
+def transaction_data():
+    incomes = Income.query.filter_by(author=current_user).all()
+    expenses = Expense.query.filter_by(author=current_user).all()
+
+    income_data = defaultdict(float)
+    expense_data = defaultdict(float)
+
+    for income in incomes:
+        income_data[income.category] += income.amount
+
+    for expense in expenses:
+        expense_data[expense.category] += expense.amount
+
+    data = {
+        "income_labels": list(income_data.keys()),
+        "income_sizes": list(income_data.values()),
+        "expense_labels": list(expense_data.keys()),
+        "expense_sizes": list(expense_data.values())
+    }
+
+    return jsonify(data)
+
+
+@main_bp.route("/switchable_graphs")
+@login_required
+def switchable_graphs_view():
+    return render_template('switchable_graphs.html', title='Switchable Graphs')
