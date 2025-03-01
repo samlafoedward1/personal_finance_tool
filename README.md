@@ -36,7 +36,3 @@ A simple and efficient personal finance management application built with Flask,
 ## Usage
 - Access the app at `http://localhost:5000` after running.
 - Navigate through the dashboard to manage expenses and view reports.
-
-## Future Enhancements
-- Add user authentication.
-- Implement advanced financial analysis features.
