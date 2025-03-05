@@ -11,8 +11,8 @@ A simple and efficient personal finance management application built with Flask,
 ## Technologies
 - **Backend:** Python, Flask
 - **Database:** SQLAlchemy, SQLite
-- **Data Analysis & Visualization:** NumPy, Matplotlib
-- **Frontend:** HTML, CSS, Jinja2
+- **Data Analysis & Visualization:** NumPy, Matplotlib, Pandas
+- **Frontend:** HTML, CSS
 
 ## Setup
 1. Clone the repo:
